@@ -16,7 +16,7 @@ create method for each class has the same function signature
 
 create method for each class can have different function signature
 
-since the final function signature is determined by its args, there are some subtle problems. Always use call by value to define the create method here.
+since the final function signature is determined by its args, there are some subtle problems. ALWAYS use call by value to define the create method here. (or maybe it can be fixed?
 
 ```c++
   FooFactory::Register("FooA", FooA::Create);
