@@ -6,8 +6,10 @@ need c++11 compiler
 g++ -std=c++11 main.cpp -lncurses
 ```
 
-![Demo](Cpp2048/2048.png)# CppFactoryPattern
-# factory pattern in C++
+![Demo](2048.png)
+
+# CppFactoryPattern
+factory pattern in C++
 
 ## factory1.cpp
 
@@ -36,6 +38,8 @@ since the final function signature is determined by its args, there are some sub
 ```
 
 
+
+
 # CppPrime
 meta-template programming to calculate the k-th prime number.
 
@@ -45,3 +49,4 @@ cout << Prime<5>::value << endl;
 ```
 
 to do more: use sieve method
+

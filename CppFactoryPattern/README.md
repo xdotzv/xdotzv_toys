@@ -1,4 +1,4 @@
-# factory pattern in C++
+factory pattern in C++
 
 ## factory1.cpp
 
