@@ -6,7 +6,7 @@ need c++11 compiler
 g++ -std=c++11 main.cpp -lncurses
 ```
 
-![Demo](2048.png)
+![Demo](2048/2048.png)
 
 # CppFactoryPattern
 factory pattern in C++
