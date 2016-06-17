@@ -29,22 +29,27 @@ using ExpPtr = Exp *;
 
 struct Binary: public Exp{
   ExpPtr lhs, rhs;
+  Binary(ExpPtr _lhs, ExpPtr _rhs):lhs(_lhs), rhs(_rhs){}
 };
 
 struct Plus: public Binary{
   void accept(VisitorPtr ) override;
+  Plus(ExpPtr _lhs, ExpPtr _rhs):Binary(_lhs, _rhs){}
 };
 
 struct Minus: public Binary{
   void accept(VisitorPtr ) override;
+  Minus(ExpPtr _lhs, ExpPtr _rhs):Binary(_lhs, _rhs){}
 };
 
 struct Multiplies: public Binary{
   void accept(VisitorPtr ) override;
+  Multiplies(ExpPtr _lhs, ExpPtr _rhs):Binary(_lhs, _rhs){}
 };
 
 struct Divides: public Binary{
   void accept(VisitorPtr ) override;
+  Divides(ExpPtr _lhs, ExpPtr _rhs):Binary(_lhs, _rhs){}
 };
 
 struct Unary: public Exp{
@@ -54,9 +59,11 @@ struct Unary: public Exp{
 
 struct Negative: public Unary{
   void accept(VisitorPtr ) override;
+  Negative(ExpPtr _p):Unary(_p){}
 };
 struct Positive: public Unary{
   void accept(VisitorPtr ) override;
+  Positive(ExpPtr _p):Unary(_p){}
 };
 
 struct Number: public Exp{
@@ -76,13 +83,13 @@ using NumberPtr = Number*;
 
 class Visitor{
 public:
-  void visit(PlusPtr) = 0;
-  void visit(MinusPtr) = 0;
-  void visit(MultipliesPtr) = 0;
-  void visit(DividesPtr) = 0;
-  void visit(PositivePtr) = 0;
-  void visit(NegativePtr) = 0;
-  void visit(NumberPtr) = 0;
+  virtual void visit(PlusPtr) = 0;
+  virtual void visit(MinusPtr) = 0;
+  virtual void visit(MultipliesPtr) = 0;
+  virtual void visit(DividesPtr) = 0;
+  virtual void visit(PositivePtr) = 0;
+  virtual void visit(NegativePtr) = 0;
+  virtual void visit(NumberPtr) = 0;
 };
 void Plus::accept(VisitorPtr visitor) {
   visitor->visit(this);
