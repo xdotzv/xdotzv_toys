@@ -1,6 +1,8 @@
 #ifndef VISITOR_H
 #define VISITOR_H
 
+#include "AST.hpp"
+
 class Visitor{
 public:
   virtual void visit(PlusPtr) = 0;

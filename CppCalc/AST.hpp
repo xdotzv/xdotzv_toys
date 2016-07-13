@@ -54,6 +54,11 @@ struct Number: public Exp{
   Number(int _value):value(_value){}
 };
 
+#define define_ptr(name) using name##Ptr = name *;
+
+define_ptr(Binary)
+define_ptr(Unary)
+define_ptr(Exp)
 
 using PlusPtr = Plus*;
 using MinusPtr = Minus*;
