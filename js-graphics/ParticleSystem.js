@@ -33,6 +33,8 @@ class Vector2 {
     return this.x * v.x + this.y * v.y;
   }
 }
+
+Vector2.zero = new Vector2(0, 0);
 class Color {
   constructor(r, g, b) {
       this.r = r;
@@ -83,14 +85,43 @@ function sampleDirection() {
   return new Vector2(Math.cos(theta), Math.sin(theta));
 }
 
+function sampleColor() {
+  //const theta = Math.random();
+  return new Color(Math.random(), Math.random(), Math.random());
+  //return new Vector2(Math.cos(theta), Math.sin(theta));
+}
+
+function sampleInterval(start, end){
+   return start + (end - start)*Math.random();
+}
+
+function ChamberBox(x1, y1, x2, y2) {
+  return function(p) {
+    if (p.position.x - p.size < x1 || p.position.x + p.size > x2) {
+      p.velocity.x = -p.velocity.x;
+    }
+    if (p.position.y - p.size < y1 || p.position.y + p.size > y2) {
+      p.velocity.y = -p.velocity.y;
+    }
+  };
+}
 class ParticleSystem {
   constructor() {
     this.particles = new Array();
+    this.effects = new Array();
     this.gravity = new Vector2(0, 10);
   }
   applyGravity() {
     for (let p of this.particles)
       p.acceleration = this.gravity;
+  }
+  addEffect(e) {
+    this.effects.push(e);
+  }
+  applyEffects() {
+    for (let e of this.effects)
+      for (let p of this.particles)
+        e(p);
   }
   emit(p) {
     this.particles.push(p);
@@ -131,16 +162,37 @@ function init() {
   const canvas = document.getElementById('testCanvas');
   const ctx = canvas.getContext('2d');
   const ps = new ParticleSystem();
+  ps.addEffect(ChamberBox(0, 0, canvas.width, canvas.height));
+
   const dt = 0.1;
   const initPosition = new Vector2(200, 200);
+  
+  let newMousePosition = Vector2.zero;
+  let oldMousePosition = Vector2.zero;
+  
+  canvas.onmousemove = function(e) {
+      newMousePosition = new Vector2(e.offsetX, e.offsetY);
+  };
+
   window.requestAnimationFrame(draw);
 
   function draw() {
-    const p = new Particle(initPosition, sampleDirection().multiply(20), 0, 5, Color.red, 5);
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    const velocity = newMousePosition.subtract(oldMousePosition).multiply(5).add(sampleDirection().multiply(10));
+    const acceleration = 0;
+    const life = sampleInterval(10, 20);
+    const color = sampleColor();
+    const size = sampleInterval(3, 8);
+      const p = new Particle(newMousePosition, velocity, acceleration, life, color, size);
+      oldMousePosition = newMousePosition;
+    //this is a hack to create motion blur
+    ctx.fillStyle = "rgba(0, 0, 0, 0.3)";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    // ctx.claerRect(0, 0, canvas.width, canvas.height);
+
     ps.emit(p);
     ps.aging(dt);
     ps.applyGravity();
+    ps.applyEffects();
     ps.kinematics(dt);
     ps.render(ctx);
     window.requestAnimationFrame(draw);
